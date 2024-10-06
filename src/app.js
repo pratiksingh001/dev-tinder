@@ -2,38 +2,25 @@ const express = require('express')
 
 const app = express();
 
-app.get("/user", (req, res) => {
-    res.send({firstName: "Pratik", lastName: "Singh"})
-})
+// GET /user ===> middleware chain => request handler
 
-app.post("/user", (req, res) => {
-    res.send("Data saved successfully")
-})
+app.use("/user", 
 
-app.delete("/user", (req, res) => {
-    res.send("User deleted")
-})
-
-app.use("/test", 
-[(req, res, next) => {
+// these two are known as middleware which run before the actual route handler
+(req, res, next) => {
     console.log("1st route")
-    next();
+    next()
 },
 (req, res, next) => {
     console.log("2nd route")
     next()
-}],
+},
+// this is known as the route handler because this is actually handling the request
 (req, res, next) => {
     console.log("3rd route")
     res.send("3rd handler")
-    next()
-},
-(req, res, next) => {
-    console.log("4th route")
-    res.send("4th handler")
 },
 )
- 
 app.listen(3000, () => {
     console.log("Server is listening on PORT 3000")
 })
