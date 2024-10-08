@@ -39,6 +39,17 @@ app.get("/user", async (req, res) => {
     }
 })
 
+app.get("/getUserById", async(req, res) => {
+    const userID = req.body._id
+
+    try{
+        const users = await User.findById({_id: userID})
+        res.send(users)
+    }catch(err){
+        res.status(400).send("User not found")
+    }
+})
+
 // Feed API - /feed -> this Api will get all the users form DB
 app.get('/feed', async (req, res) => {
     try{
