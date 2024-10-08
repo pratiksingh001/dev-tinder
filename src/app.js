@@ -6,6 +6,7 @@ const User = require('./models/user')
 // This is the middleware to able to read the JSON request body by converting it into JS object
 app.use(express.json());
 
+// ! POST API
 app.post("/signup", async (req, res) => {
     // Creating a new instance of the User model
     const user = new User(req.body)
@@ -18,6 +19,8 @@ app.post("/signup", async (req, res) => {
 b 
     }
 })
+
+// ! GET API
 
 // get user by email
 app.get("/user", async (req, res) => {
@@ -39,17 +42,6 @@ app.get("/user", async (req, res) => {
     }
 })
 
-app.get("/getUserById", async(req, res) => {
-    const userID = req.body._id
-
-    try{
-        const users = await User.findById({_id: userID})
-        res.send(users)
-    }catch(err){
-        res.status(400).send("User not found")
-    }
-})
-
 // Feed API - /feed -> this Api will get all the users form DB
 app.get('/feed', async (req, res) => {
     try{
@@ -65,6 +57,34 @@ app.get('/feed', async (req, res) => {
     }
 })
 
+// ! DELETE API
+
+app.delete("/user", async(req, res) => {
+    const userId = req.body._id;
+    try{
+        // const user = await User.findByIdAndDelete({_id : userId})
+        
+        // This will will the same => <findByIdAndDelete(userId)> is just the shorthand for <findByIdAndDelete({_id : userId})>
+        const user = await User.findByIdAndDelete(userId)
+        res.send("User deleted successfully")
+    }catch{
+        res.status(500).send("Something went wrong")
+    }
+})
+
+// ! PATCH API
+
+app.patch("/user", async(req, res) => {
+    const userID = req.body._id
+    const data = req.body
+    try{
+        await User.findByIdAndUpdate(userID, data)
+        res.send("User updated successfully")
+    }catch(err){
+        res.status(400).send("Something went wrong")
+    }
+})
+
 connectDB().then(() => {
     console.log("DB connected successfully")
     app.listen(3000, () => {
@@ -73,3 +93,4 @@ connectDB().then(() => {
 }).catch(() => {
     console.error("DB connection failed")
 })
+
