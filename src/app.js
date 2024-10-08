@@ -3,17 +3,12 @@ const connectDB =  require('./config/database')
 const app = express();
 const User = require('./models/user')
 
+// This is the middleware to able to read the JSON request body by converting it into JS object
+app.use(express.json());
 
 app.post("/signup", async (req, res) => {
     // Creating a new instance of the User model
-    const user = new User({
-        firstName : 'MS',
-        lastName: "Dhoni",
-        email: 'dhoni@gmail.com',
-        password: 'dhoni@123',
-        age: 38,
-        gender: 'Male'
-    })
+    const user = new User(req.body)
 
     try{
         await user.save()

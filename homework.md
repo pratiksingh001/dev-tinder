@@ -1,0 +1,3 @@
+- Difference between JS Object and JSON
+- Add express.json middleware in the app
+- Make /signin api dynamic
